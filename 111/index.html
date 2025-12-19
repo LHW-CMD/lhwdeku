@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>五子棋 - 全设备适配版</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- 引入自定义样式 -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Tailwind配置 -->
+  <script src="tailwind.config.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-2 md:p-4 font-sans text-gray-800">
+  <!-- 登录/注册模态框 - 响应式尺寸优化 -->
+  <div id="auth-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-3">
+    <div class="bg-white rounded-xl p-5 md:p-8 w-full max-w-md shadow-2xl modal-enter">
+      <!-- 登录表单 -->
+      <div id="login-form" class="auth-form">
+        <h2 class="text-xl md:text-2xl font-bold mb-5 md:mb-6 text-center text-primary">用户登录</h2>
+        
+        <div class="mb-3 md:mb-4">
+          <label class="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base" for="login-username">用户名</label>
+          <div class="relative">
+            <i class="fa fa-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="text" id="login-username" class="w-full pl-10 pr-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors text-base" placeholder="请输入用户名">
+          </div>
+        </div>
+        <div class="mb-5 md:mb-6">
+          <label class="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base" for="login-password">密码</label>
+          <div class="relative">
+            <i class="fa fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="password" id="login-password" class="w-full pl-10 pr-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors text-base" placeholder="请输入密码">
+          </div>
+        </div>
+        <div class="flex justify-end mb-5 md:mb-6">
+          <a href="#" class="text-primary hover:underline text-sm">忘记密码？</a>
+        </div>
+        <button id="login-btn" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 mb-4 text-base">登录</button>
+        <p class="text-center text-gray-600 text-sm md:text-base">还没有账号？<a id="go-register" class="text-primary hover:underline">立即注册</a></p>
+      </div>
+      
+      <!-- 注册表单 -->
+      <div id="register-form" class="auth-form hidden">
+        <h2 class="text-xl md:text-2xl font-bold mb-5 md:mb-6 text-center text-primary">用户注册</h2>
+        <div class="mb-3 md:mb-4">
+          <label class="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base" for="reg-username">用户名</label>
+          <div class="relative">
+            <i class="fa fa-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="text" id="reg-username" class="w-full pl-10 pr-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors text-base" placeholder="请设置用户名（3-16位）">
+          </div>
+        </div>
+        <div class="mb-3 md:mb-4">
+          <label class="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base" for="reg-phone">手机号（选填）</label>
+          <div class="relative">
+            <i class="fa fa-phone absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="tel" id="reg-phone" class="w-full pl-10 pr-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors text-base" placeholder="用于找回密码" maxlength="11">
+          </div>
+        </div>
+        <div class="mb-5 md:mb-6">
+          <label class="block text-gray-700 mb-1 md:mb-2 text-sm md:text-base" for="reg-password">设置密码</label>
+          <div class="relative">
+            <i class="fa fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="password" id="reg-password" class="w-full pl-10 pr-4 py-2.5 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors text-base" placeholder="请设置密码（6-16位）">
+          </div>
+        </div>
+        <button id="register-btn" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 mb-4 text-base">注册</button>
+        <p class="text-center text-gray-600 text-sm md:text-base">已有账号？<a id="go-login" class="text-primary hover:underline">返回登录</a></p>
+      </div>
+      
+      <!-- 错误提示 - 响应式位置调整 -->
+      <div id="auth-error" class="fixed bottom-3 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in hidden max-w-[90%] text-center">
+        <span id="error-message"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 游戏标题 - 响应式字体 -->
+  <header class="mb-4 md:mb-6 text-center w-full px-2">
+    <h1 class="text-[clamp(1.5rem,5vw,2.8rem)] font-bold mb-2 flex items-center justify-center gap-2 text-primary">
+      <i class="fa fa-gamepad"></i> 五子棋
+    </h1>
+    <div class="flex items-center justify-center gap-2 mb-2 flex-wrap">
+      <span id="user-info" class="text-gray-600 hidden text-sm md:text-base">欢迎，<span id="username-display"></span></span>
+      <button id="logout-btn" class="hidden flex items-center gap-1 bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded-lg transition-all duration-200 text-sm">
+        <i class="fa fa-sign-out"></i> 退出登录
+      </button>
+    </div>
+    <p class="text-gray-600 max-w-md mx-auto text-sm md:text-base">黑白交替落子，先连成五子线者获胜</p>
+  </header>
+
+  <!-- 游戏状态信息 - 响应式布局 -->
+  <div class="flex justify-between items-center w-full max-w-md mb-3 md:mb-4 px-2">
+    <div class="flex items-center gap-2">
+      <div id="current-player" class="w-5 md:w-6 h-5 md:h-6 rounded-full bg-black shadow-piece"></div>
+      <span class="font-medium text-sm md:text-base">当前回合</span>
+    </div>
+    <button id="restart-btn" class="flex items-center gap-1 bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1.5 rounded-lg transition-all duration-200 text-sm md:text-base">
+      <i class="fa fa-refresh"></i> 重新开始
+    </button>
+  </div>
+
+  <!-- 棋盘容器 - 核心响应式优化 -->
+  <div class="relative bg-board rounded-lg shadow-lg overflow-hidden border-3 md:border-4 border-primary/80 w-full max-w-md aspect-square">
+    <div id="board" class="board-grid w-full h-full cursor-pointer relative transition-all duration-300 hover:shadow-xl touch-manipulation">
+      <!-- 棋子将通过JavaScript动态生成 -->
+    </div>
+  </div>
+
+  <!-- 获胜提示模态框 - 响应式优化 -->
+  <div id="win-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden p-3">
+    <div class="bg-white rounded-xl p-6 md:p-8 w-full max-w-md shadow-2xl modal-enter text-center">
+      <div id="winner-icon" class="w-14 md:w-16 h-14 md:h-16 rounded-full mx-auto mb-4 shadow-piece bg-black"></div>
+      <h2 class="text-xl md:text-2xl font-bold mb-3 md:mb-2" id="win-message">黑方获胜！</h2>
+      <p class="text-gray-600 mb-5 md:mb-6 text-sm md:text-base">恭喜你赢得比赛！</p>
+      <button id="new-game-btn" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-base">
+        新游戏
+      </button>
+    </div>
+  </div>
+
+  <!-- 引入游戏逻辑 -->
+  <script src="game.js"></script>
+</body>
+</html>

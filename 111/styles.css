@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .content-auto {
+    content-visibility: auto;
+  }
+  .board-grid {
+    background-image: linear-gradient(to right, #8B4513 1px, transparent 1px),
+                      linear-gradient(to bottom, #8B4513 1px, transparent 1px);
+  }
+  .piece-hover {
+    @apply opacity-40 transition-opacity duration-200;
+  }
+  .win-animation {
+    animation: winPulse 1.5s infinite alternate;
+  }
+  @keyframes winPulse {
+    0% { transform: scale(1) translate(-50%, -50%); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1); }
+    100% { transform: scale(1.1) translate(-50%, -50%); box-shadow: 0 0 20px 5px rgba(255, 107, 53, 0.8); }
+  }
+  .modal-enter {
+    animation: modalFadeIn 0.5s ease-out;
+  }
+  @keyframes modalFadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* 基础响应式配置 */
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 375px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* 确保棋盘在任何设备上都是正方形 */
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+/* 触摸设备优化样式 */
+@media (hover: none) and (pointer: coarse) {
+  /* 增大按钮点击区域 */
+  button, a {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* 增大输入框内边距，便于触摸 */
+  input {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+  
+  /* 增大登录/注册按钮点击区域 */
+  #login-btn, #register-btn, #new-game-btn {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+  }
+  
+  /* 增大重新开始按钮 */
+  #restart-btn {
+    padding: 8px 16px !important;
+  }
+}
+
+/* 自定义滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: #8B451340;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8B451380;
+}
+
+/* 登录表单样式优化 */
+.auth-form input:focus {
+  @apply ring-2 ring-primary/50 border-primary;
+}
+
+/* 棋盘背景色优化 */
+.bg-board {
+  background-color: #F5DEB3; /* 小麦色，更接近传统棋盘 */
+}
+
+/* 防止触摸设备缩放 */
+* {
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 响应式错误提示 */
+#auth-error {
+  transform: translateX(-50%);
+  max-width: 90%;
+  z-index: 100;
+}
+
+/* 棋子样式优化 */
+div[data-x] {
+  transition: all 0.1s ease;
+}
+
+/* 模态框背景优化，增强对比度 */
+#win-modal, #auth-modal {
+  backdrop-filter: blur(2px);
+}
+
+/* 确保按钮在触摸设备上有明显反馈 */
+@media (hover: none) and (pointer: coarse) {
+  button:active {
+    transform: scale(0.98);
+  }
+  a:active {
+    transform: scale(0.95);
+  }
+}
